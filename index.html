@@ -1,0 +1,780 @@
+<title>Girl on Fire 7일 파일럿</title>
+
+<style>
+:root{
+  --bg:#F5F2F2; --surface:#FFFFFF; --surface-2:#FBF8F9;
+  --ink:#23181F; --muted:#7A6B72; --faint:#A09197;
+  --line:#E6DDDF; --line-strong:#D3C6CA;
+  --accent:#C42B5C; --accent-ink:#FFFFFF; --accent-soft:#FBEBF0;
+  --good:#2F7D5D; --good-soft:#E7F2EC;
+  --shadow:0 1px 2px rgba(35,24,31,.06), 0 6px 16px rgba(35,24,31,.05);
+  --r:12px;
+  --serif:ui-serif,"Iowan Old Style","New York",Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#161116; --surface:#201921; --surface-2:#28202A;
+    --ink:#F1E9EC; --muted:#A3939B; --faint:#7B6C74;
+    --line:#352A34; --line-strong:#483A46;
+    --accent:#FF6E96; --accent-ink:#25101A; --accent-soft:#33202B;
+    --good:#5FBE93; --good-soft:#1E2E27;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161116; --surface:#201921; --surface-2:#28202A;
+  --ink:#F1E9EC; --muted:#A3939B; --faint:#7B6C74;
+  --line:#352A34; --line-strong:#483A46;
+  --accent:#FF6E96; --accent-ink:#25101A; --accent-soft:#33202B;
+  --good:#5FBE93; --good-soft:#1E2E27;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:560px; margin:0 auto; padding:0 16px 132px}
+
+/* ---------- masthead ---------- */
+.mast{padding:26px 0 18px; border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); margin:0 0 8px
+}
+.mast h1{
+  font-family:var(--serif); font-weight:600; font-size:30px; line-height:1.12;
+  margin:0; letter-spacing:-.01em; text-wrap:balance
+}
+.mast .sub{margin:8px 0 0; color:var(--muted); font-size:14px}
+.mast .sub b{color:var(--ink); font-weight:600}
+
+/* ---------- generic ---------- */
+h2.sec{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--faint);
+  margin:0; padding:0 0 2px; font-weight:600
+}
+.stack{display:flex; flex-direction:column; gap:14px}
+.panel{display:none}
+.panel.on{display:flex; flex-direction:column; gap:22px; padding-top:22px}
+.group{display:flex; flex-direction:column; gap:10px}
+.card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); box-shadow:var(--shadow)
+}
+.pad{padding:14px 15px}
+p{margin:0}
+.note{font-size:13.5px; color:var(--muted); line-height:1.6}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ---------- timer ---------- */
+.timer{
+  display:flex; align-items:center; gap:12px; padding:12px 14px;
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); box-shadow:var(--shadow)
+}
+.clock{
+  font-family:var(--mono); font-size:27px; font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em; flex:1; margin:0
+}
+.clock.run{color:var(--accent)}
+.tbtn{
+  font-family:var(--sans); font-size:13px; font-weight:600;
+  padding:9px 15px; min-height:40px; border-radius:9px; cursor:pointer;
+  border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink)
+}
+.tbtn.pri{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+
+/* ---------- day rows ---------- */
+.day{
+  display:flex; gap:12px; align-items:flex-start; width:100%;
+  padding:13px 14px; text-align:left; cursor:pointer;
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); box-shadow:var(--shadow);
+  font:inherit; color:inherit
+}
+.day + .day{margin-top:8px}
+.day[data-done="1"]{background:var(--good-soft); border-color:transparent}
+.box{
+  flex:none; width:24px; height:24px; margin-top:2px; border-radius:7px;
+  border:1.5px solid var(--line-strong); background:var(--surface);
+  display:grid; place-items:center; font-size:14px; color:transparent
+}
+.day[data-done="1"] .box{background:var(--good); border-color:var(--good); color:#fff}
+.day .body{flex:1; min-width:0}
+.day .tag{
+  font-family:var(--mono); font-size:11px; letter-spacing:.1em;
+  color:var(--accent); font-weight:600
+}
+.day[data-done="1"] .tag{color:var(--good)}
+.day .txt{font-size:14.5px; line-height:1.5; margin-top:1px}
+.day .min{
+  font-family:var(--mono); font-size:11.5px; color:var(--faint);
+  flex:none; margin-top:3px
+}
+
+/* ---------- fields ---------- */
+label.f{display:flex; flex-direction:column; gap:5px}
+label.f > span{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--faint); font-weight:600
+}
+input[type="text"], textarea{
+  width:100%; font-family:var(--sans); font-size:15.5px; color:var(--ink);
+  background:var(--surface-2); border:1px solid var(--line);
+  border-radius:9px; padding:10px 11px; line-height:1.5; resize:vertical
+}
+input.tc{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:center}
+input::placeholder, textarea::placeholder{color:var(--faint)}
+input:focus-visible, textarea:focus-visible, button:focus-visible{
+  outline:2px solid var(--accent); outline-offset:2px
+}
+.row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+
+/* ---------- youtube player ---------- */
+.stage{
+  position:sticky; top:0; z-index:4; margin:0 -16px; padding:0 16px 10px;
+  background:var(--bg)
+}
+.frame{
+  position:relative; width:100%; aspect-ratio:16/9; overflow:hidden;
+  border-radius:var(--r); background:#000; border:1px solid var(--line);
+  box-shadow:var(--shadow)
+}
+.frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.frame .ph{
+  position:absolute; inset:0; display:grid; place-items:center; padding:18px;
+  text-align:center; font-size:13.5px; line-height:1.6; color:var(--muted);
+  background:var(--surface-2)
+}
+.stage .bar{display:flex; gap:8px; align-items:center; margin-top:8px}
+.stage .bar input{flex:1; font-size:14px; padding:9px 11px}
+.rate{
+  font-family:var(--mono); font-size:12.5px; font-weight:700; min-width:52px;
+  padding:9px 0; border-radius:9px; cursor:pointer; min-height:40px;
+  border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink)
+}
+.rate[data-slow="1"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+
+/* ---------- loop row ---------- */
+.loop{display:flex; gap:7px; align-items:center; flex-wrap:wrap}
+.lb{
+  font-family:var(--sans); font-size:13px; font-weight:600; cursor:pointer;
+  padding:0 12px; height:38px; border-radius:9px;
+  border:1px solid var(--line-strong); background:var(--surface-2); color:var(--ink)
+}
+.lb.mark{font-family:var(--mono); font-size:12px; letter-spacing:.04em; padding:0 11px}
+.lb.play{flex:1; background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.lb.play[data-on="1"]{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.lb:disabled{opacity:.4; cursor:default}
+.cnt{
+  font-family:var(--mono); font-size:12.5px; font-weight:700; color:var(--faint);
+  font-variant-numeric:tabular-nums; padding:0 3px
+}
+.cnt[data-hit="1"]{color:var(--good)}
+.hint{font-size:12.5px; color:var(--accent); min-height:0}
+
+/* ---------- section head ---------- */
+.shead{
+  display:flex; align-items:baseline; gap:9px; justify-content:space-between;
+  padding:12px 15px 0
+}
+.shead .nm{font-family:var(--serif); font-size:18px; font-weight:600}
+.stars{font-family:var(--mono); font-size:12px; color:var(--accent); letter-spacing:.08em}
+.first{
+  display:inline-block; font-family:var(--mono); font-size:10px; font-weight:700;
+  letter-spacing:.1em; padding:3px 7px; border-radius:5px;
+  background:var(--accent); color:var(--accent-ink); margin-left:7px; vertical-align:2px
+}
+
+/* ---------- flashcards ---------- */
+.fc{overflow:hidden}
+.fc .top{
+  display:flex; align-items:center; gap:10px; padding:12px 15px;
+  border-bottom:1px solid var(--line)
+}
+.fc .no{
+  font-family:var(--mono); font-size:12px; font-weight:700; color:var(--accent);
+  flex:none; width:26px
+}
+.fc .top input{flex:1; font-weight:600}
+.ok{
+  flex:none; width:36px; height:36px; border-radius:9px; cursor:pointer;
+  border:1.5px solid var(--line-strong); background:var(--surface-2);
+  color:var(--faint); font-size:15px; display:grid; place-items:center
+}
+.ok[aria-pressed="true"]{background:var(--good); border-color:var(--good); color:#fff}
+.lock{
+  padding:14px 15px; text-align:center; color:var(--muted); font-size:13.5px;
+  background:var(--surface-2); border-top:1px dashed var(--line-strong)
+}
+.back{display:none; flex-direction:column; gap:11px; padding:13px 15px; background:var(--surface-2)}
+.back.on{display:flex}
+
+/* ---------- reference ---------- */
+table{width:100%; border-collapse:collapse; font-size:14px}
+.scroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
+th,td{text-align:left; padding:9px 14px; border-top:1px solid var(--line); vertical-align:top}
+thead th{
+  border-top:none; font-family:var(--mono); font-size:10.5px; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--faint); font-weight:600; padding-top:12px
+}
+td.k{font-weight:600; white-space:nowrap}
+td.k em{font-style:normal; color:var(--accent)}
+.warn{border-left:3px solid var(--accent); background:var(--accent-soft)}
+.warn .pad{padding:13px 15px}
+.warn b{color:var(--accent)}
+
+/* ---------- verdict ---------- */
+.v{display:flex; align-items:center; gap:12px; padding:13px 15px}
+.v + .v{border-top:1px solid var(--line)}
+.v .dot{
+  flex:none; width:11px; height:11px; border-radius:50%;
+  background:var(--line-strong); box-shadow:0 0 0 3px var(--bg)
+}
+.v[data-pass="1"] .dot{background:var(--good)}
+.v .lab{flex:1; font-size:14.5px}
+.v .lab small{display:block; color:var(--muted); font-size:12.5px; margin-top:1px}
+.v .val{font-family:var(--mono); font-size:14px; font-weight:700; color:var(--muted)}
+.v[data-pass="1"] .val{color:var(--good)}
+.verdict-out{
+  padding:15px; text-align:center; font-family:var(--serif); font-size:17px;
+  font-weight:600; border-top:1px solid var(--line); line-height:1.45
+}
+
+/* ---------- tab bar ---------- */
+.tabs{
+  position:fixed; left:0; right:0; bottom:0; z-index:5;
+  display:flex; gap:2px; padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+  background:var(--surface); border-top:1px solid var(--line);
+  box-shadow:0 -4px 20px rgba(35,24,31,.07)
+}
+.tab{
+  flex:1; border:none; background:none; cursor:pointer; color:var(--muted);
+  font:inherit; font-size:12.5px; font-weight:600; padding:8px 2px 7px;
+  border-radius:9px; display:flex; flex-direction:column; align-items:center; gap:3px;
+  min-height:48px
+}
+.tab .n{
+  font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; color:var(--faint)
+}
+.tab[aria-selected="true"]{background:var(--accent-soft); color:var(--accent)}
+.tab[aria-selected="true"] .n{color:var(--accent)}
+
+.foot{
+  margin-top:6px; padding-top:14px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--faint); line-height:1.6
+}
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <p class="eyebrow">Stage 0 · 7일 파일럿</p>
+    <h1>Girl on Fire</h1>
+    <p class="sub">Alicia Keys · <b>2012 스튜디오 원곡</b> — 캐스트 버전은 D7 이후<br>08-17 시작 · <b>08-23 판정</b> · 하루 12분</p>
+  </header>
+
+  <!-- ============ 7일 ============ -->
+  <section class="panel on" id="p-days">
+    <div class="group">
+      <h2 class="sec">세션 타이머</h2>
+      <div class="timer">
+        <p class="clock" id="clock">12:00</p>
+        <button class="tbtn pri" id="tgo">시작</button>
+        <button class="tbtn" id="trs">초기화</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2 class="sec">오늘 할 것 — 탭해서 완료</h2>
+      <div id="days"></div>
+    </div>
+
+    <div class="card warn">
+      <div class="pad">
+        <p class="note"><b>옥타브 경고.</b> 후렴은 여성 벨팅 음역이다. 원키로 못 따라가는 게 정상이니
+        <b>한 옥타브 낮춰</b> 부른다. 목표는 음정이 아니라 리듬과 연음이다. 여기서 “난 안 되네” 하고
+        접는 게 이런 학습의 가장 흔한 사망 원인.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 구간 ============ -->
+  <section class="panel" id="p-secs">
+
+    <div class="stage">
+      <div class="frame"><div id="yt"></div><div class="ph" id="ph">유튜브 주소를 넣으면 여기서 재생된다</div></div>
+      <div class="bar">
+        <input type="text" id="vurl" inputmode="url" placeholder="유튜브 주소 붙여넣기">
+        <button class="tbtn pri" id="vload">불러오기</button>
+        <button class="rate" id="rate" data-slow="0">1.0x</button>
+      </div>
+    </div>
+
+    <div class="card warn">
+      <div class="pad">
+        <p class="note">가사는 <b>직접 받아쓰면서</b> 채운다. 공식 가사 페이지를 붙여넣는 것보다
+        귀로 받아쓰는 게 1일차 학습 그 자체다. <b>A·B 를 찍고 구간반복</b>을 눌러 10회를 채운다.
+        입력값은 이 기기에만 남는다.</p>
+      </div>
+    </div>
+
+    <div class="stack" id="secs"></div>
+  </section>
+
+  <!-- ============ 카드 ============ -->
+  <section class="panel" id="p-cards">
+    <div class="card warn">
+      <div class="pad">
+        <p class="note"><b>철칙 — 추측을 먼저 쓴다.</b> 뜻을 먼저 보면 뇌가 추론을 멈추고,
+        그 순간 이건 그냥 번역기다. 추측을 입력해야 뒷면이 열린다.
+        목표는 <b>8장</b>이지 15장이 아니다.</p>
+      </div>
+    </div>
+    <div class="stack" id="cards"></div>
+  </section>
+
+  <!-- ============ 참고 ============ -->
+  <section class="panel" id="p-ref">
+
+    <div class="group">
+      <h2 class="sec">A · 은유 하나 → 관용구 여섯</h2>
+      <div class="card scroll">
+        <table>
+          <thead><tr><th>표현</th><th>뜻</th><th>쓰는 자리</th></tr></thead>
+          <tbody>
+            <tr><td class="k">be <em>on fire</em></td><td>지금 기세가 최고다</td><td>“우리 팀 이번 분기 on fire”</td></tr>
+            <tr><td class="k"><em>fired</em> up</td><td>잔뜩 달아오른, 의욕 충만</td><td>회의 들어가기 전</td></tr>
+            <tr><td class="k"><em>burn</em> out</td><td>소진되다</td><td>커리어 대화</td></tr>
+            <tr><td class="k"><em>spark</em></td><td>불씨 / 촉발하다</td><td>“그 데모가 spark 였다”</td></tr>
+            <tr><td class="k">go up in <em>flames</em></td><td>완전히 망하다</td><td>프로젝트 회고</td></tr>
+            <tr><td class="k">rise from the <em>ashes</em></td><td>재기하다</td><td>턴어라운드 서사</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">곡 하나에 묶어두면 안 잊는다. 카드 뒷면 ⑤ 확장 칸에 여기서 하나씩 가져다 쓴다.</p>
+    </div>
+
+    <div class="group">
+      <h2 class="sec">B · 현재진행형의 “지금 이 순간”</h2>
+      <div class="card"><div class="pad stack">
+        <p class="note"><code style="font-family:var(--mono)">be + -ing</code> 이 <b>일시적 상태를 강조</b>하는 용법.
+        학교에서 “~하는 중”으로만 배워서 한국인이 못 쓰는 자리다. 이 곡 후렴이 통째로 그 예시.</p>
+        <div class="card" style="box-shadow:none; background:var(--surface-2)">
+          <table>
+            <tbody>
+              <tr><td class="k">She <em>is</em> strong.</td><td>원래 강한 사람 (성질)</td></tr>
+              <tr><td class="k">She <em>is being</em> strong.</td><td>지금 애써 그러는 중 (일시)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">이 차이가 몸에 붙으면 영어 표현력이 한 단계 올라간다.</p>
+      </div></div>
+    </div>
+
+    <div class="group">
+      <h2 class="sec">C · 시점 전환 — 3인칭 → 1인칭</h2>
+      <div class="card"><div class="pad">
+        <p class="note">관찰자로 시작해 자기 선언으로 끝나는 구조. <b>뮤지컬 각성 넘버의 문법 장치</b>다.
+        가사를 채우면서 <b>she 가 I 로 바뀌는 지점</b>에 표시를 남긴다 — 발표·자기소개에 그대로 쓰이는 수사 구조다.</p>
+      </div></div>
+    </div>
+
+    <div class="group">
+      <h2 class="sec">D · 발음 3대 함정</h2>
+      <div class="card scroll">
+        <table>
+          <thead><tr><th>지점</th><th>문제</th><th>연습</th></tr></thead>
+          <tbody>
+            <tr><td class="k"><em>girl</em></td><td>한국어에 없는 R 모음. “걸”이 아니다</td><td>혀끝을 어디에도 대지 않고 목 안쪽에서</td></tr>
+            <tr><td class="k"><em>fire</em></td><td>“파이어” 3박이 아니다</td><td>노래에선 거의 한 덩어리로 압축</td></tr>
+            <tr><td class="k">연음</td><td>단어 끝 자음이 뒤 모음으로 넘어감</td><td>단어 사이를 끊지 말고 한 호흡</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2 class="sec">Stage 1 설계 입력 — 하면서 관찰</h2>
+      <div class="card"><div class="pad stack" id="obs"></div></div>
+    </div>
+
+    <div class="group">
+      <h2 class="sec">백업 — 워크스페이스로 옮기기</h2>
+      <div class="card"><div class="pad stack">
+        <p class="note">입력은 이 브라우저에만 저장된다. 아래를 길게 눌러 전체 선택 → 복사해
+        <code style="font-family:var(--mono);font-size:12px">43-ideas/song-english/</code> 에 붙여넣는다.</p>
+        <button class="tbtn" id="dump" style="align-self:flex-start">현재 상태 뽑기</button>
+        <textarea id="out" rows="5" readonly placeholder="버튼을 누르면 여기에 나온다"></textarea>
+      </div></div>
+    </div>
+
+    <p class="foot" id="stor"></p>
+  </section>
+
+</div>
+
+<nav class="tabs" role="tablist">
+  <button class="tab" role="tab" aria-selected="true"  data-t="days"><span class="n">7일</span>진행</button>
+  <button class="tab" role="tab" aria-selected="false" data-t="secs"><span class="n">05</span>구간</button>
+  <button class="tab" role="tab" aria-selected="false" data-t="cards"><span class="n">08</span>카드</button>
+  <button class="tab" role="tab" aria-selected="false" data-t="ref"><span class="n">REF</span>참고</button>
+</nav>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- storage (sandbox-safe) ---------- */
+var KEY="gof-stage0", mem={}, ok=true;
+try{ localStorage.setItem("__t","1"); localStorage.removeItem("__t"); }catch(e){ ok=false; }
+function load(){
+  try{ return JSON.parse((ok?localStorage.getItem(KEY):mem[KEY])||"{}"); }catch(e){ return {}; }
+}
+function save(){
+  var s=JSON.stringify(S);
+  try{ ok?localStorage.setItem(KEY,s):(mem[KEY]=s); }catch(e){ mem[KEY]=s; }
+  paint();
+}
+var S=load();
+S.days=S.days||{}; S.secs=S.secs||{}; S.cards=S.cards||{}; S.obs=S.obs||{}; S.feel=S.feel||false;
+
+document.getElementById("stor").textContent = ok
+  ? "이 기기 브라우저에 자동 저장된다. 방문 기록을 지우면 함께 사라지니 주 1회 백업할 것."
+  : "저장이 막힌 환경이다 — 탭을 닫으면 입력이 사라진다. 끝내기 전에 반드시 백업할 것.";
+
+/* ---------- data ---------- */
+var DAYS=[
+ ["D1","전곡 3회 통청 (자막 없이) → 후렴 가사 채우기 → 카드 3장","15분"],
+ ["D2","후렴 구간반복 10회 → <b>첫 녹음</b> → 원곡과 번갈아 듣기","12분"],
+ ["D3","Verse 1 채우기 + 카드 3장 → 후렴 무자막 따라부르기","12분"],
+ ["D4","카드 6장 복습 → 참고 A의 관용구 6개 소리내어 읽기","10분"],
+ ["D5","Bridge 채우기 + 카드 2장 → 전곡 따라부르기 1회","12분"],
+ ["D6","카드 8장 전수 복습 → <b>2차 녹음</b>","12분"],
+ ["D7","D2 녹음 vs D6 녹음 나란히 듣기 → 아래 판정","15분"]
+];
+var SECS=[
+ ["1","Verse 1","★★☆",0],["2","Pre-chorus","★☆☆",0],
+ ["3","Chorus","★☆☆",1],["4","Verse 2","★★★",0],["5","Bridge","★★☆",0]
+];
+var OBS=[
+ "손으로 해서 가장 짜증났던 단계는? → 1순위 자동화 대상",
+ "구간 반복을 몇 초 단위로 하고 싶었나? → A-B 루프 기본값",
+ "녹음을 다시 들었나, 안 들었나? → 안 들었으면 Shadow 단계는 통째로 삭제",
+ "자막을 언제 껐나? → 자막 토글의 기본 상태"
+];
+
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+
+/* ---------- 7일 ---------- */
+var dEl=document.getElementById("days");
+DAYS.forEach(function(d,i){
+  var b=document.createElement("button");
+  b.className="day"; b.type="button";
+  b.setAttribute("data-done", S.days[i]?"1":"0");
+  b.setAttribute("aria-pressed", S.days[i]?"true":"false");
+  b.innerHTML='<span class="box" aria-hidden="true">✓</span>'+
+    '<span class="body"><span class="tag">'+d[0]+'</span>'+
+    '<span class="txt" style="display:block">'+d[1]+'</span></span>'+
+    '<span class="min">'+d[2]+'</span>';
+  b.addEventListener("click",function(){
+    S.days[i]=!S.days[i];
+    b.setAttribute("data-done", S.days[i]?"1":"0");
+    b.setAttribute("aria-pressed", S.days[i]?"true":"false");
+    save();
+  });
+  dEl.appendChild(b);
+});
+
+/* ---------- 타이머 ---------- */
+var left=720, tick=null, cl=document.getElementById("clock"),
+    go=document.getElementById("tgo"), rs=document.getElementById("trs");
+function show(){
+  var m=Math.floor(left/60), s=left%60;
+  cl.textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+}
+function stop(){ clearInterval(tick); tick=null; go.textContent="시작"; cl.classList.remove("run"); }
+go.addEventListener("click",function(){
+  if(tick){ stop(); return; }
+  go.textContent="일시정지"; cl.classList.add("run");
+  tick=setInterval(function(){
+    left--; show();
+    if(left<=0){ left=0; show(); stop(); cl.textContent="끝"; }
+  },1000);
+});
+rs.addEventListener("click",function(){ stop(); left=720; show(); });
+show();
+
+/* ---------- 시간 변환 ---------- */
+function t2s(v){
+  if(v==null) return null;
+  v=String(v).trim(); if(!v) return null;
+  var m=v.match(/^(\d+):([0-5]?\d(?:\.\d+)?)$/);
+  if(m) return (+m[1])*60 + parseFloat(m[2]);
+  if(/^\d+(\.\d+)?$/.test(v)) return parseFloat(v);
+  return null;
+}
+function s2t(s){
+  s=Math.max(0,s||0);
+  var m=Math.floor(s/60), r=s-m*60;
+  return m+":"+(r<10?"0":"")+r.toFixed(1);
+}
+
+/* ---------- 구간 ---------- */
+var sEl=document.getElementById("secs");
+var ORDER=[SECS[2],SECS[0],SECS[1],SECS[3],SECS[4]];
+ORDER.forEach(function(s){
+  var id=s[0], v=S.secs[id]||{};
+  var w=document.createElement("div"); w.className="card";
+  w.innerHTML=
+    '<div class="shead"><span class="nm">'+s[1]+
+      (s[3]?'<span class="first">여기부터</span>':'')+'</span>'+
+      '<span class="stars">'+s[2]+'</span></div>'+
+    '<div class="pad stack">'+
+      '<div class="row2">'+
+        '<label class="f"><span>A · 시작</span><input type="text" class="tc" placeholder="0:00.0" data-s="'+id+'" data-k="a" value="'+esc(v.a)+'"></label>'+
+        '<label class="f"><span>B · 끝</span><input type="text" class="tc" placeholder="0:00.0" data-s="'+id+'" data-k="b" value="'+esc(v.b)+'"></label>'+
+      '</div>'+
+      '<div class="loop">'+
+        '<button class="lb mark" type="button" data-mark="a" data-s="'+id+'">A 찍기</button>'+
+        '<button class="lb mark" type="button" data-mark="b" data-s="'+id+'">B 찍기</button>'+
+        '<button class="lb play" type="button" data-play="'+id+'" data-on="0">구간반복</button>'+
+        '<span class="cnt" data-cnt="'+id+'">0/10</span>'+
+      '</div>'+
+      '<p class="hint" data-hint="'+id+'"></p>'+
+      '<label class="f"><span>받아쓴 가사</span><textarea rows="4" placeholder="들리는 대로 먼저. 확인은 나중에." data-s="'+id+'" data-k="t">'+esc(v.t)+'</textarea></label>'+
+    '</div>';
+  sEl.appendChild(w);
+});
+sEl.addEventListener("input",function(e){
+  var t=e.target, id=t.getAttribute("data-s"); if(!id) return;
+  S.secs[id]=S.secs[id]||{}; S.secs[id][t.getAttribute("data-k")]=t.value; save();
+});
+
+function hint(id,msg){
+  var h=sEl.querySelector('[data-hint="'+id+'"]'); if(!h) return;
+  h.textContent=msg||"";
+  if(msg) setTimeout(function(){ if(h.textContent===msg) h.textContent=""; },3200);
+}
+
+/* ---------- 유튜브 A-B 루퍼 ---------- */
+var P=null, live=false, loopId=null, laps={}, poll=null;
+var ph=document.getElementById("ph");
+var rateBtn=document.getElementById("rate");
+
+function vid(u){
+  u=String(u||"").trim(); if(!u) return null;
+  var m=u.match(/(?:v=|youtu\.be\/|\/embed\/|\/shorts\/|\/live\/)([\w-]{11})/);
+  if(m) return m[1];
+  return /^[\w-]{11}$/.test(u) ? u : null;
+}
+
+function mount(id){
+  if(!window.YT || !YT.Player){ ph.textContent="유튜브 플레이어를 불러오지 못했다."; return; }
+  ph.style.display="none";
+  if(P && P.loadVideoById){ P.loadVideoById(id); return; }
+  P=new YT.Player("yt",{
+    videoId:id, host:"https://www.youtube-nocookie.com",
+    playerVars:{playsinline:1, rel:0, modestbranding:1},
+    events:{ onReady:function(){ live=true; P.setPlaybackRate(rateBtn.dataset.slow==="1"?0.75:1); } }
+  });
+}
+
+/* API 로드 — 아티팩트처럼 외부 호스트가 막힌 환경에서는 조용히 안내로 대체 */
+(function(){
+  var s=document.createElement("script");
+  s.src="https://www.youtube.com/iframe_api";
+  s.onerror=function(){ ph.innerHTML="이 환경은 외부 스크립트를 차단한다.<br>GitHub Pages 로 열면 재생된다."; };
+  document.head.appendChild(s);
+  setTimeout(function(){
+    if(!window.YT) ph.innerHTML="이 환경은 외부 스크립트를 차단한다.<br>GitHub Pages 로 열면 재생된다.";
+  },5000);
+})();
+window.onYouTubeIframeAPIReady=function(){
+  var u=document.getElementById("vurl");
+  if(S.vid){ u.value="https://youtu.be/"+S.vid; mount(S.vid); }
+  else ph.textContent="유튜브 주소를 넣으면 여기서 재생된다";
+};
+document.getElementById("vurl").value = S.vid ? "https://youtu.be/"+S.vid : "";
+
+document.getElementById("vload").addEventListener("click",function(){
+  var id=vid(document.getElementById("vurl").value);
+  if(!id){ ph.style.display="grid"; ph.textContent="주소를 알아볼 수 없다. 유튜브 링크를 그대로 붙여넣어라."; return; }
+  S.vid=id; save(); mount(id);
+});
+
+rateBtn.addEventListener("click",function(){
+  var slow=rateBtn.dataset.slow!=="1";
+  rateBtn.dataset.slow=slow?"1":"0";
+  rateBtn.textContent=slow?"0.75x":"1.0x";
+  if(live) P.setPlaybackRate(slow?0.75:1);
+});
+
+function stopLoop(){
+  if(loopId){
+    var b=sEl.querySelector('[data-play="'+loopId+'"]');
+    if(b){ b.dataset.on="0"; b.textContent="구간반복"; }
+  }
+  loopId=null;
+  if(live) P.pauseVideo();
+}
+
+sEl.addEventListener("click",function(e){
+  var t=e.target.closest?e.target.closest("button"):null; if(!t) return;
+
+  if(t.hasAttribute("data-mark")){
+    if(!live){ hint(t.getAttribute("data-s"),"먼저 영상을 불러와 재생하라"); return; }
+    var sid=t.getAttribute("data-s"), k=t.getAttribute("data-mark");
+    var now=P.getCurrentTime();
+    S.secs[sid]=S.secs[sid]||{}; S.secs[sid][k]=s2t(now); save();
+    var f=sEl.querySelector('[data-s="'+sid+'"][data-k="'+k+'"]'); if(f) f.value=s2t(now);
+    return;
+  }
+
+  if(t.hasAttribute("data-play")){
+    var id=t.getAttribute("data-play");
+    if(loopId===id){ stopLoop(); return; }
+    if(!live){ hint(id,"먼저 영상을 불러와라"); return; }
+    var v=S.secs[id]||{}, a=t2s(v.a), b=t2s(v.b);
+    if(a==null||b==null||b<=a){ hint(id,"A·B 를 먼저 찍어라 (B 가 A 보다 뒤여야 한다)"); return; }
+    stopLoop();
+    loopId=id; laps[id]=0; mark(id);
+    t.dataset.on="1"; t.textContent="정지";
+    P.seekTo(a,true); P.playVideo();
+  }
+});
+
+function mark(id){
+  var c=sEl.querySelector('[data-cnt="'+id+'"]'); if(!c) return;
+  var n=laps[id]||0;
+  c.textContent=n+"/10";
+  c.setAttribute("data-hit", n>=10?"1":"0");
+}
+
+poll=setInterval(function(){
+  if(!live||!loopId) return;
+  var v=S.secs[loopId]||{}, a=t2s(v.a), b=t2s(v.b);
+  if(a==null||b==null) return;
+  var now=P.getCurrentTime();
+  if(now>=b-0.06 || now<a-1.5){
+    P.seekTo(a,true);
+    laps[loopId]=(laps[loopId]||0)+1;
+    mark(loopId);
+  }
+},120);
+
+/* ---------- 카드 ---------- */
+var cEl=document.getElementById("cards"), FB=[
+ ["lit","② 직역","단어 그대로는?"],
+ ["fre","③ 의역 (이 곡 맥락)","이 장면에서 진짜 뜻은?"],
+ ["reg","④ 회사에서 쓰려면","구어 → 격식으로 바꾸면?"],
+ ["ext","⑤ 확장 — 같은 계열 1개","참고 A에서 가져오기"]
+];
+for(var i=1;i<=8;i++){
+  (function(n){
+    var c=S.cards[n]||{};
+    var w=document.createElement("div"); w.className="card fc";
+    var back=FB.map(function(f){
+      return '<label class="f"><span>'+f[1]+'</span><textarea rows="2" placeholder="'+f[2]+'" data-c="'+n+'" data-k="'+f[0]+'">'+esc(c[f[0]])+'</textarea></label>';
+    }).join("");
+    w.innerHTML=
+      '<div class="top"><span class="no">'+(n<10?"0":"")+n+'</span>'+
+        '<input type="text" placeholder="곡에서 가져온 표현" data-c="'+n+'" data-k="ex" value="'+esc(c.ex)+'">'+
+        '<button class="ok" type="button" aria-pressed="'+(c.ok?"true":"false")+'" aria-label="즉답 가능" data-ok="'+n+'">⚡</button></div>'+
+      '<div class="pad"><label class="f"><span>① 내 추측 — 먼저 쓴다</span>'+
+        '<textarea rows="2" placeholder="사전 보지 말고 느낌으로" data-c="'+n+'" data-k="gs">'+esc(c.gs)+'</textarea></label></div>'+
+      '<div class="lock" data-lock="'+n+'">추측을 쓰면 뒷면이 열린다</div>'+
+      '<div class="back" data-back="'+n+'">'+back+'</div>';
+    cEl.appendChild(w);
+    sync(n);
+  })(i);
+}
+function sync(n){
+  var has=!!(S.cards[n]&&S.cards[n].gs&&S.cards[n].gs.trim());
+  cEl.querySelector('[data-back="'+n+'"]').classList.toggle("on",has);
+  cEl.querySelector('[data-lock="'+n+'"]').style.display=has?"none":"block";
+}
+cEl.addEventListener("input",function(e){
+  var t=e.target, n=t.getAttribute("data-c"); if(!n) return;
+  S.cards[n]=S.cards[n]||{}; S.cards[n][t.getAttribute("data-k")]=t.value;
+  if(t.getAttribute("data-k")==="gs") sync(n);
+  save();
+});
+cEl.addEventListener("click",function(e){
+  var b=e.target.closest?e.target.closest("[data-ok]"):null; if(!b) return;
+  var n=b.getAttribute("data-ok");
+  S.cards[n]=S.cards[n]||{}; S.cards[n].ok=!S.cards[n].ok;
+  b.setAttribute("aria-pressed", S.cards[n].ok?"true":"false"); save();
+});
+
+/* ---------- 판정 (7일 탭 하단) ---------- */
+var vw=document.createElement("div"); vw.className="group";
+vw.innerHTML='<h2 class="sec">D7 판정 — 08-23</h2>'+
+  '<div class="card" id="vcard">'+
+  '<div class="v" data-k="run"><span class="dot"></span><span class="lab">지속<small>7일 중 5일 이상 실제로 열었다</small></span><span class="val"></span></div>'+
+  '<div class="v" data-k="get"><span class="dot"></span><span class="lab">습득<small>카드 8장 중 6장 이상 3초 내 즉답 (⚡)</small></span><span class="val"></span></div>'+
+  '<button class="v" data-k="feel" type="button" style="width:100%;text-align:left;background:none;border:none;border-top:1px solid var(--line);font:inherit;color:inherit;cursor:pointer">'+
+    '<span class="dot"></span><span class="lab">체감<small>D2 녹음 → D6 녹음, 내가 들어서 차이가 난다</small></span><span class="val">탭</span></button>'+
+  '<p class="verdict-out" id="vout"></p></div>';
+document.getElementById("p-days").appendChild(vw);
+vw.querySelector('[data-k="feel"]').addEventListener("click",function(){ S.feel=!S.feel; save(); });
+
+function paint(){
+  var run=0,i; for(i=0;i<7;i++) if(S.days[i]) run++;
+  var get=0,n; for(n=1;n<=8;n++) if(S.cards[n]&&S.cards[n].ok) get++;
+  var q=function(k){ return vw.querySelector('[data-k="'+k+'"]'); };
+  q("run").setAttribute("data-pass", run>=5?"1":"0");
+  q("run").querySelector(".val").textContent=run+"/7";
+  q("get").setAttribute("data-pass", get>=6?"1":"0");
+  q("get").querySelector(".val").textContent=get+"/8";
+  q("feel").setAttribute("data-pass", S.feel?"1":"0");
+  q("feel").querySelector(".val").textContent=S.feel?"예":"탭";
+
+  var p=(run>=5?1:0)+(get>=6?1:0)+(S.feel?1:0);
+  var o=document.getElementById("vout");
+  o.textContent = p===3 ? "3/3 — 채번하고 MVP 착수"
+    : p===2 ? "2/3 — 곡을 바꿔서 한 번 더. 앱 문제가 아니라 곡 문제일 수 있다"
+    : p+"/3 — 만들지 않는다. 3일 아낀 게 아니라 두 달 아낀 것";
+  o.style.color = p===3 ? "var(--good)" : p===2 ? "var(--ink)" : "var(--muted)";
+}
+
+/* ---------- 관찰 메모 ---------- */
+var oEl=document.getElementById("obs");
+OBS.forEach(function(t,i){
+  var l=document.createElement("label"); l.className="f";
+  l.innerHTML='<span>'+(i+1)+'</span><textarea rows="2" placeholder="'+t+'" data-o="'+i+'">'+esc(S.obs[i])+'</textarea>';
+  oEl.appendChild(l);
+});
+oEl.addEventListener("input",function(e){
+  var i=e.target.getAttribute("data-o"); if(i===null) return;
+  S.obs[i]=e.target.value; save();
+});
+
+/* ---------- 백업 ---------- */
+document.getElementById("dump").addEventListener("click",function(){
+  var o=document.getElementById("out");
+  o.value=JSON.stringify(S,null,1); o.focus(); o.select();
+});
+
+/* ---------- 탭 ---------- */
+var tabs=[].slice.call(document.querySelectorAll(".tab"));
+tabs.forEach(function(t){
+  t.addEventListener("click",function(){
+    tabs.forEach(function(x){ x.setAttribute("aria-selected", x===t?"true":"false"); });
+    ["days","secs","cards","ref"].forEach(function(k){
+      document.getElementById("p-"+k).classList.toggle("on", k===t.getAttribute("data-t"));
+    });
+    window.scrollTo(0,0);
+  });
+});
+
+paint();
+})();
+</script>
