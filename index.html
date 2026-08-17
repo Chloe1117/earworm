@@ -1,4 +1,12 @@
 <title>Girl on Fire 7일 파일럿</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F5F2F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161116" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Girl on Fire">
 
 <style>
 :root{
@@ -142,7 +150,8 @@ input:focus-visible, textarea:focus-visible, button:focus-visible{
   background:var(--bg)
 }
 .frame{
-  position:relative; width:100%; aspect-ratio:16/9; overflow:hidden;
+  position:relative; width:min(100%, calc(34vh * 16 / 9)); margin:0 auto;
+  aspect-ratio:16/9; overflow:hidden;
   border-radius:var(--r); background:#000; border:1px solid var(--line);
   box-shadow:var(--shadow)
 }
