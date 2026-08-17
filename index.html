@@ -86,9 +86,15 @@ p{margin:0}
   background:var(--surface); border:1px solid var(--line);
   border-radius:var(--r); box-shadow:var(--shadow)
 }
+.tinfo{flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:2px}
+.dsel{
+  font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.1em;
+  color:var(--accent); background:var(--accent-soft); border:none;
+  border-radius:5px; padding:3px 8px; cursor:pointer
+}
 .clock{
   font-family:var(--mono); font-size:27px; font-variant-numeric:tabular-nums;
-  letter-spacing:-.02em; flex:1; margin:0
+  letter-spacing:-.02em; margin:0
 }
 .clock.run{color:var(--accent)}
 .tbtn{
@@ -317,10 +323,14 @@ td.k em{font-style:normal; color:var(--accent)}
     <div class="group">
       <h2 class="sec">세션 타이머</h2>
       <div class="timer">
-        <p class="clock" id="clock">12:00</p>
+        <div class="tinfo">
+          <button class="dsel" type="button" id="dsel">D1 · 15분</button>
+          <p class="clock" id="clock">15:00</p>
+        </div>
         <button class="tbtn pri" id="tgo">시작</button>
         <button class="tbtn" id="trs">초기화</button>
       </div>
+      <p class="note">완주가 목적이 아니다. 이 시간은 <b>“이만큼 한다”가 아니라 “이 이상 안 한다”</b>는 상한선이다.</p>
     </div>
 
     <div class="group">
@@ -532,23 +542,48 @@ DAYS.forEach(function(d,i){
 });
 
 /* ---------- 타이머 ---------- */
-var left=720, tick=null, cl=document.getElementById("clock"),
-    go=document.getElementById("tgo"), rs=document.getElementById("trs");
+var left=0, tick=null, shownDay=-1,
+    cl=document.getElementById("clock"), go=document.getElementById("tgo"),
+    rs=document.getElementById("trs"), dsel=document.getElementById("dsel");
+
+/* 오늘 = 아직 체크 안 된 첫 날. 라벨을 탭하면 수동으로 돌린다 */
+function curDay(){
+  if(S.tday!=null && S.tday>=0 && S.tday<7) return S.tday;
+  for(var i=0;i<7;i++) if(!S.days[i]) return i;
+  return 6;
+}
+function dayMin(i){ return parseInt(DAYS[i][2],10)||12; }
+
 function show(){
   var m=Math.floor(left/60), s=left%60;
   cl.textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
 }
 function stop(){ clearInterval(tick); tick=null; go.textContent="시작"; cl.classList.remove("run"); }
+
+/* 날짜가 바뀌면 그 날 분량으로 다시 세팅 — 단, 돌아가는 중이면 건드리지 않는다 */
+function syncTimer(){
+  var i=curDay();
+  dsel.textContent="D"+(i+1)+" · "+dayMin(i)+"분";
+  if(i!==shownDay){
+    shownDay=i;
+    if(!tick){ left=dayMin(i)*60; show(); }
+  }
+}
+
 go.addEventListener("click",function(){
   if(tick){ stop(); return; }
+  if(left<=0) left=dayMin(curDay())*60;   /* 0 에서 다시 누르면 그 날 분량으로 */
+  show();
   go.textContent="일시정지"; cl.classList.add("run");
   tick=setInterval(function(){
-    left--; show();
-    if(left<=0){ left=0; show(); stop(); cl.textContent="끝"; }
+    left--;
+    if(left<=0){ left=0; stop(); cl.textContent="끝"; return; }
+    show();
   },1000);
 });
-rs.addEventListener("click",function(){ stop(); left=720; show(); });
-show();
+rs.addEventListener("click",function(){ stop(); left=dayMin(curDay())*60; show(); });
+dsel.addEventListener("click",function(){ S.tday=(curDay()+1)%7; shownDay=-1; save(); });
+syncTimer();
 
 /* ---------- 시간 변환 ---------- */
 function t2s(v){
@@ -628,8 +663,10 @@ function mount(id){
   if(!window.YT || !YT.Player){ ph.textContent="유튜브 플레이어를 불러오지 못했다."; return; }
   ph.style.display="none";
   if(P && P.loadVideoById){ P.loadVideoById(id); return; }
+  /* 표준 도메인이어야 로그인 세션이 실려 Premium 이 적용된다.
+     youtube-nocookie 는 쿠키를 끊어버려 광고가 붙는다 */
   P=new YT.Player("yt",{
-    videoId:id, host:"https://www.youtube-nocookie.com",
+    videoId:id, host:"https://www.youtube.com",
     playerVars:{playsinline:1, rel:0, modestbranding:1},
     events:{ onReady:function(){ live=true; P.setPlaybackRate(rateBtn.dataset.slow==="1"?0.75:1); } }
   });
@@ -846,6 +883,7 @@ function paint(){
     : p===2 ? "2/3 — 곡을 바꿔서 한 번 더. 앱 문제가 아니라 곡 문제일 수 있다"
     : p+"/3 — 만들지 않는다. 3일 아낀 게 아니라 두 달 아낀 것";
   o.style.color = p===3 ? "var(--good)" : p===2 ? "var(--ink)" : "var(--muted)";
+  syncTimer();
 }
 
 /* ---------- 관찰 메모 ---------- */
