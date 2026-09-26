@@ -11,3 +11,4 @@ Girl on Fire 7일 파일럿 — 유튜브 A-B 루퍼가 붙은 단일 페이지.
 - PWA: `manifest.webmanifest` · `sw.js` · `icons/`
 - TWA 패키징: [`android/`](android/README.md)
 - 출시 전략: [`docs/PLAY_STRATEGY.md`](docs/PLAY_STRATEGY.md)
+- 대기자 랜딩 페이지: [`landing/`](landing/README.md) · Supabase 스키마 [`supabase/waitlist.sql`](supabase/waitlist.sql)

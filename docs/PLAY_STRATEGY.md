@@ -88,19 +88,22 @@ K-pop 가사는 영어 혼용·속어·반말·생략이 많아 **문법 교재�
 
 ## 6. 10X Critical Action
 
-* **[Action 1] 지금 당장 — 가짜 문 테스트(fake-door test).** 랜딩 페이지 1장 + 숏폼 1편으로 시작한다. **7일 안에 대기자 100명**이 모이면 개발, 못 모이면 코드 한 줄 쓰기 전에 방향을 바꾼다.
+* **[Action 1] 지금 당장 — 가짜 문 테스트(fake-door test).** 랜딩 페이지(`landing/`, 설정은 `landing/README.md`) + 숏폼 1편으로 시작한다. **7일 안에 대기자 100명**이 모이면 개발, 못 모이면 코드 한 줄 쓰기 전에 방향을 바꾼다.
 
 * **[Action 2] 장기 축적 — Supabase 스키마.** 국가 · 가격 · 곡을 수요 데이터가 결정하게 만든다.
 
 ```sql
--- Phase 0: 수요 검증
+-- Phase 0: 수요 검증 — 전체 정의(RLS·중복 방지·국가별 판단 뷰)는 supabase/waitlist.sql
 create table waitlist (
   id           uuid primary key default gen_random_uuid(),
-  country      text not null,
-  bias_group   text,          -- 최애 그룹 (팬덤 용어)
-  song_request text,          -- 처음 배우고 싶은 곡
-  price_ok_usd numeric,       -- 낼 수 있다고 답한 최고 가격 → 4장 가격 규칙 입력값
-  src          text,          -- tiktok | reels | community
+  email        text not null,          -- 출시일 동시 공지용 (lower(email) 유니크)
+  country      text not null,          -- ISO 2자리, 'ZZ' = 기타
+  bias_group   text,                   -- 최애 그룹 (팬덤 용어)
+  song_request text,                   -- 처음 배우고 싶은 곡
+  price_ok_usd numeric,                -- 1회 결제로 낼 수 있는 최고 가격 → 4장 가격 규칙 입력값
+  src          text,                   -- tiktok | reels | community | share | direct
+  lang         text,                   -- 브라우저 언어
+  consent      boolean not null,       -- 출시 알림 수신 동의
   created_at   timestamptz default now()
 );
 
