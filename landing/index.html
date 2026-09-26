@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hookline — Sing K-pop in Korean</title>
+<meta name="description" content="Paste the lyrics, loop one line, and sing the chorus in real Korean in 7 days. Join the early-access waitlist.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F5F2F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161116" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Hookline — Sing K-pop in Korean in 7 days">
+<meta property="og:description" content="A sing-along trainer for K-pop fans. Loop one line, see how it really sounds, sing the chorus by Day 7.">
+<meta property="og:image" content="../icons/icon-512.png">
+<link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+
+<style>
+:root{
+  --bg:#F5F2F2; --surface:#FFFFFF; --surface-2:#FBF8F9;
+  --ink:#23181F; --muted:#7A6B72; --faint:#A09197;
+  --line:#E6DDDF; --line-strong:#D3C6CA;
+  --accent:#C42B5C; --accent-ink:#FFFFFF; --accent-soft:#FBEBF0;
+  --good:#2F7D5D; --good-soft:#E7F2EC; --bad:#B3261E;
+  --shadow:0 1px 2px rgba(35,24,31,.06), 0 6px 16px rgba(35,24,31,.05);
+  --r:14px;
+  --serif:ui-serif,"Iowan Old Style","New York",Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#161116; --surface:#201921; --surface-2:#28202A;
+    --ink:#F1E9EC; --muted:#A3939B; --faint:#7B6C74;
+    --line:#352A34; --line-strong:#483A46;
+    --accent:#FF6E96; --accent-ink:#25101A; --accent-soft:#33202B;
+    --good:#5FBE93; --good-soft:#1E2E27; --bad:#FF8A80;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161116; --surface:#201921; --surface-2:#28202A;
+  --ink:#F1E9EC; --muted:#A3939B; --faint:#7B6C74;
+  --line:#352A34; --line-strong:#483A46;
+  --accent:#FF6E96; --accent-ink:#25101A; --accent-soft:#33202B;
+  --good:#5FBE93; --good-soft:#1E2E27; --bad:#FF8A80;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); font-size:16px; line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:560px; margin:0 auto; padding:0 16px 48px}
+p{margin:0}
+.eyebrow{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); margin:0 0 10px; font-weight:600
+}
+h2{
+  font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--faint); margin:0 0 12px; font-weight:600
+}
+section{padding:36px 0 0}
+.card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r); box-shadow:var(--shadow)
+}
+
+/* ---------- hero ---------- */
+.hero{padding:40px 0 4px}
+.hero h1{
+  font-family:var(--serif); font-weight:600; font-size:38px; line-height:1.08;
+  margin:0; letter-spacing:-.015em; text-wrap:balance
+}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .sub{margin:14px 0 0; color:var(--muted); font-size:16.5px; text-wrap:pretty}
+.cta{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  margin-top:22px; min-height:50px; padding:0 22px; border-radius:12px;
+  background:var(--accent); color:var(--accent-ink); font-weight:700; font-size:16px;
+  text-decoration:none; border:none; cursor:pointer; font-family:var(--sans)
+}
+.cta:focus-visible,.chip:focus-within,input:focus-visible,select:focus-visible{
+  outline:2px solid var(--accent); outline-offset:2px
+}
+.meta{margin-top:10px; font-size:13px; color:var(--faint)}
+
+/* ---------- demo line ---------- */
+.demo{padding:18px 16px 16px}
+.demo .kr{font-size:25px; font-weight:600; letter-spacing:.01em; line-height:1.35}
+.demo .kr mark{background:var(--accent-soft); color:var(--accent); border-radius:5px; padding:0 3px}
+.demo .ro{font-family:var(--mono); font-size:15px; color:var(--ink); margin-top:6px}
+.demo .ro mark{background:none; color:var(--accent); font-weight:700}
+.demo .en{font-size:14.5px; color:var(--muted); margin-top:4px; font-style:italic}
+.rules{margin-top:14px; border-top:1px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:8px}
+.rule{display:flex; gap:10px; align-items:baseline; font-size:13.5px; color:var(--muted)}
+.rule b{
+  flex:none; font-family:var(--mono); font-size:12px; color:var(--accent);
+  background:var(--accent-soft); border-radius:6px; padding:2px 7px; font-weight:600
+}
+.loopbar{
+  display:flex; align-items:center; gap:10px; margin-top:14px;
+  font-family:var(--mono); font-size:12px; color:var(--faint)
+}
+.track{flex:1; height:6px; border-radius:3px; background:var(--line); position:relative}
+.track i{position:absolute; left:34%; width:24%; top:0; bottom:0; border-radius:3px; background:var(--accent)}
+.pill{border:1px solid var(--line-strong); border-radius:6px; padding:1px 6px; color:var(--muted)}
+
+/* ---------- steps ---------- */
+.steps{display:flex; flex-direction:column; gap:10px; margin:0; padding:0; list-style:none}
+.steps li{display:flex; gap:14px; padding:14px 15px}
+.steps .n{
+  flex:none; width:30px; height:30px; border-radius:9px; display:grid; place-items:center;
+  font-family:var(--mono); font-weight:700; font-size:13px;
+  background:var(--accent-soft); color:var(--accent)
+}
+.steps b{display:block; font-size:15.5px}
+.steps span{font-size:14px; color:var(--muted)}
+
+/* ---------- form ---------- */
+form{padding:18px 16px; display:flex; flex-direction:column; gap:16px}
+label.f{display:flex; flex-direction:column; gap:6px}
+.lbl{font-size:14px; font-weight:600}
+.lbl small{font-weight:400; color:var(--faint)}
+input[type="email"],input[type="text"],select{
+  width:100%; min-height:46px; font-family:var(--sans); font-size:16px; color:var(--ink);
+  background:var(--surface-2); border:1px solid var(--line-strong);
+  border-radius:10px; padding:10px 12px
+}
+input::placeholder{color:var(--faint)}
+fieldset{border:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px}
+legend{padding:0; margin-bottom:8px}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{position:relative}
+.chip input{position:absolute; opacity:0; inset:0; margin:0; cursor:pointer}
+.chip span{
+  display:inline-flex; align-items:center; min-height:40px; padding:0 14px;
+  border:1px solid var(--line-strong); border-radius:999px; background:var(--surface-2);
+  font-size:14.5px; font-variant-numeric:tabular-nums; cursor:pointer
+}
+.chip input:checked + span{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600}
+.consent{display:flex; gap:10px; align-items:flex-start; font-size:13.5px; color:var(--muted)}
+.consent input{width:20px; height:20px; margin:1px 0 0; flex:none; accent-color:var(--accent)}
+.hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+.err{font-size:13.5px; color:var(--bad); min-height:0}
+.err:empty{display:none}
+form .cta{margin-top:0; width:100%}
+form .cta[disabled]{opacity:.6; cursor:wait}
+
+.done{padding:22px 18px; display:none; flex-direction:column; gap:10px}
+.done.on{display:flex}
+.done .big{font-family:var(--serif); font-size:26px; font-weight:600; line-height:1.15}
+.done p{color:var(--muted); font-size:14.5px}
+.share{display:flex; gap:8px; margin-top:6px}
+.share button{
+  flex:1; min-height:44px; border-radius:10px; border:1px solid var(--line-strong);
+  background:var(--surface-2); color:var(--ink); font:600 14px var(--sans); cursor:pointer
+}
+
+/* ---------- faq ---------- */
+details{padding:0 15px}
+details + details{border-top:1px solid var(--line)}
+summary{padding:14px 0; font-weight:600; font-size:15px; cursor:pointer; list-style:none; display:flex; justify-content:space-between; gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+"; color:var(--faint); font-family:var(--mono)}
+details[open] summary::after{content:"−"}
+details p{padding:0 0 14px; font-size:14.5px; color:var(--muted)}
+
+footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--faint)}
+footer a,.consent a{color:inherit; text-decoration:underline; text-underline-offset:2px}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header class="hero">
+  <p class="eyebrow">K-pop sing-along trainer · early access</p>
+  <h1>Sing the chorus. <em>In real Korean.</em> In 7&nbsp;days.</h1>
+  <p class="sub">Paste the lyrics of any song you love. Hookline shows how each line <b>actually sounds</b>, loops it until it sticks, and has you singing along by Day 7.</p>
+  <a class="cta" href="#join">Join the waitlist</a>
+  <p class="meta">Free to join · launching on Android first</p>
+</header>
+
+<section aria-labelledby="h-demo">
+  <h2 id="h-demo">What one line looks like</h2>
+  <div class="card demo">
+    <p class="kr" lang="ko">너와 <mark>같이</mark> <mark>걷고</mark> 싶어</p>
+    <p class="ro">neo-wa <mark>ga-chi</mark> <mark>geot-kko</mark> si-peo</p>
+    <p class="en">I want to walk with you</p>
+    <div class="rules">
+      <p class="rule"><b>같이 → ga-chi</b> The ㅌ softens into “ch” before 이. You won’t hear “gat-i”.</p>
+      <p class="rule"><b>걷고 → geot-kko</b> The ㄱ turns tense after ㄷ. Textbook spelling misses this.</p>
+    </div>
+    <div class="loopbar" aria-hidden="true"><span class="pill">A</span><span class="track"><i></i></span><span class="pill">B</span><span>0.75×</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-how">
+  <h2 id="h-how">How the 7 days work</h2>
+  <ol class="steps">
+    <li class="card"><span class="n">1</span><p><b>Paste a YouTube link and the lyrics</b><span>Any song. Your lyrics stay on your phone.</span></p></li>
+    <li class="card"><span class="n">2</span><p><b>Loop one line from A to B</b><span>Tap twice to mark it, slow it to 0.75×, and repeat until your mouth knows it.</span></p></li>
+    <li class="card"><span class="n">3</span><p><b>Record yourself on Day 1 and Day 7</b><span>Play them back side by side and hear how far you came.</span></p></li>
+  </ol>
+</section>
+
+<section id="join" aria-labelledby="h-join">
+  <h2 id="h-join">Get early access</h2>
+  <div class="card">
+    <form id="wl" novalidate>
+      <label class="f">
+        <span class="lbl">Email</span>
+        <input type="email" name="email" autocomplete="email" inputmode="email" required placeholder="you@example.com" maxlength="254">
+      </label>
+
+      <label class="f">
+        <span class="lbl">Country</span>
+        <select name="country" required></select>
+      </label>
+
+      <label class="f">
+        <span class="lbl">Favorite group <small>(optional)</small></span>
+        <input type="text" name="bias_group" maxlength="80" placeholder="Who got you into K-pop?">
+      </label>
+
+      <label class="f">
+        <span class="lbl">First song you want to sing <small>(optional)</small></span>
+        <input type="text" name="song_request" maxlength="120" placeholder="Song title">
+      </label>
+
+      <fieldset>
+        <legend class="lbl">What would you pay, once, for the full app?</legend>
+        <div class="chips" id="price"></div>
+      </fieldset>
+
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>I’m 13 or older (16 in the EU), and I’d like one email when Hookline launches. No spam. <a href="privacy.html">Privacy</a></span>
+      </label>
+
+      <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <p class="err" id="err" role="alert"></p>
+      <button class="cta" type="submit" id="go">Join the waitlist</button>
+    </form>
+
+    <div class="done" id="done" role="status">
+      <p class="eyebrow">You’re on the list</p>
+      <p class="big">See you on Day 1.</p>
+      <p>We’ll email you once, on launch day. Know a fan who’d want this? Launch-day spots go to the waitlist first.</p>
+      <div class="share">
+        <button type="button" id="shareBtn">Share</button>
+        <button type="button" id="copyBtn">Copy link</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-faq">
+  <h2 id="h-faq">Questions</h2>
+  <div class="card">
+    <details><summary>Which songs can I learn?</summary><p>Any song on YouTube. You paste the lyrics yourself; Hookline doesn’t come with lyrics built in.</p></details>
+    <details><summary>Do I need to read Hangul?</summary><p>No. Every line is spelled out the way it’s really sung, with the tricky sound changes marked.</p></details>
+    <details><summary>How much will it cost?</summary><p>We haven’t decided yet. Your answer above decides it, so pick what feels fair.</p></details>
+    <details><summary>Is this an official app?</summary><p>No. Hookline is an independent learning tool and is not affiliated with any artist, label or agency.</p></details>
+  </div>
+</section>
+
+<footer>
+  <p>Hookline is an independent sing-along tool. Not affiliated with any artist, label, agency or YouTube. We store only what you type in this form, and use your email only to tell you about the launch. <a href="privacy.html">Privacy policy</a></p>
+</footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- 설정 — Supabase 프로젝트 값으로 바꾼다 ----------
+   anon 키는 공개돼도 된다: waitlist.sql 의 RLS 가 INSERT 만 허용한다.
+   비어 있으면 데모 모드 — 전송 대신 콘솔에 출력하고 완료 화면을 보여준다. */
+var SUPABASE_URL = "https://xftosfbremgmmvxbrhab.supabase.co";
+var SUPABASE_ANON_KEY = "sb_publishable_dJS9nzBUyQ9oxbdmPn9qeQ_aeAhc3Zr";
+
+/* ---------- 유입 경로 ---------- */
+var qs = new URLSearchParams(location.search);
+var SRC = (qs.get("src") || qs.get("utm_source") || "direct").toLowerCase().slice(0,40);
+
+/* ---------- 국가 — 우선 시장을 맨 위에 ---------- */
+var TOP = [["US","United States"],["BR","Brazil"],["MX","Mexico"],["PH","Philippines"],["ID","Indonesia"]];
+var REST = [["AR","Argentina"],["AU","Australia"],["CA","Canada"],["CL","Chile"],["CO","Colombia"],
+  ["DE","Germany"],["EG","Egypt"],["ES","Spain"],["FR","France"],["GB","United Kingdom"],["IN","India"],
+  ["IT","Italy"],["JP","Japan"],["MY","Malaysia"],["NL","Netherlands"],["PE","Peru"],["PL","Poland"],
+  ["SA","Saudi Arabia"],["SG","Singapore"],["TH","Thailand"],["TR","Türkiye"],["TW","Taiwan"],
+  ["VN","Vietnam"],["ZA","South Africa"]];
+var sel = document.querySelector("select[name=country]");
+function opt(v,t){ var o=document.createElement("option"); o.value=v; o.textContent=t; return o; }
+sel.appendChild(opt("","Select your country"));
+var g1=document.createElement("optgroup"); g1.label="Most requested";
+TOP.forEach(function(c){ g1.appendChild(opt(c[0],c[1])); });
+var g2=document.createElement("optgroup"); g2.label="All";
+REST.forEach(function(c){ g2.appendChild(opt(c[0],c[1])); });
+g2.appendChild(opt("ZZ","Other"));
+sel.appendChild(g1); sel.appendChild(g2);
+
+/* 브라우저 언어의 지역 코드로 미리 선택 (en-US → US). 틀리면 사용자가 바꾼다 */
+var LANG = (navigator.language || "").slice(0,20);
+var region = (LANG.split("-")[1] || "").toUpperCase();
+if(region && sel.querySelector('option[value="'+region+'"]')) sel.value = region;
+
+/* ---------- 가격 칩 — 4장 가격 규칙의 입력값 ---------- */
+var PRICES = [[0,"Free only"],[0.99,"$0.99"],[1.99,"$1.99"],[2.99,"$2.99"],[4.99,"$4.99"],[6.99,"$6.99+"]];
+var pEl = document.getElementById("price");
+PRICES.forEach(function(p){
+  var l=document.createElement("label"); l.className="chip";
+  l.innerHTML='<input type="radio" name="price" value="'+p[0]+'" required><span>'+p[1]+'</span>';
+  pEl.appendChild(l);
+});
+
+/* ---------- 제출 ---------- */
+var form=document.getElementById("wl"), err=document.getElementById("err"),
+    go=document.getElementById("go"), done=document.getElementById("done");
+
+function fail(msg, field){
+  err.textContent = msg;
+  if(field) field.focus();
+}
+
+function finish(){
+  form.style.display="none";
+  done.classList.add("on");
+  done.scrollIntoView({block:"center"});
+}
+
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+  err.textContent = "";
+  var f = form.elements;
+
+  if(f.website.value) { finish(); return; }   /* 허니팟 — 봇은 조용히 성공 처리 */
+
+  var email = f.email.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail("Please enter a valid email.", f.email);
+  if(!f.country.value) return fail("Please choose your country.", f.country);
+  var picked = form.querySelector("input[name=price]:checked");
+  if(!picked) return fail("Please pick a price, even “Free only”. It really helps us decide.", pEl.querySelector("input"));
+  if(!f.consent.checked) return fail("Please confirm you’re 13 or older and tick the box so we can email you at launch.", f.consent);
+
+  var row = {
+    email: email,
+    country: f.country.value,
+    bias_group: f.bias_group.value.trim() || null,
+    song_request: f.song_request.value.trim() || null,
+    price_ok_usd: parseFloat(picked.value),
+    src: SRC,
+    lang: LANG || null,
+    consent: true
+  };
+
+  if(!SUPABASE_URL || !SUPABASE_ANON_KEY){
+    console.info("[demo mode] waitlist row:", row);
+    finish(); return;
+  }
+
+  go.disabled = true; go.textContent = "Joining…";
+  var headers = {
+    "apikey": SUPABASE_ANON_KEY,
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal"
+  };
+  /* 레거시 anon 키(JWT, eyJ…)만 Bearer 로 보낸다. publishable 키(sb_publishable_…)는 JWT 가 아니라 apikey 헤더만 쓴다 */
+  if(/^eyJ/.test(SUPABASE_ANON_KEY)) headers.Authorization = "Bearer " + SUPABASE_ANON_KEY;
+  fetch(SUPABASE_URL.replace(/\/$/,"") + "/rest/v1/waitlist", {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(row)
+  }).then(function(res){
+    /* 409 = 이미 가입한 이메일 → 사용자에겐 성공과 같다 */
+    if(res.ok || res.status === 409){ finish(); return; }
+    throw new Error("HTTP " + res.status);
+  }).catch(function(){
+    go.disabled = false; go.textContent = "Join the waitlist";
+    fail("Couldn’t save that. Check your connection and try again.");
+  });
+});
+
+/* ---------- 공유 — 다시 들어오는 방문은 src=share 로 집계 ---------- */
+var shareUrl = location.origin + location.pathname + "?src=share";
+var shareText = "Sing K-pop in real Korean in 7 days. Early access:";
+var shareBtn = document.getElementById("shareBtn"), copyBtn = document.getElementById("copyBtn");
+if(!navigator.share) shareBtn.style.display = "none";
+shareBtn.addEventListener("click", function(){
+  navigator.share({ title:"Hookline", text:shareText, url:shareUrl }).catch(function(){});
+});
+copyBtn.addEventListener("click", function(){
+  var ok = function(){ copyBtn.textContent = "Copied"; setTimeout(function(){ copyBtn.textContent = "Copy link"; }, 1600); };
+  if(navigator.clipboard) navigator.clipboard.writeText(shareUrl).then(ok, function(){ prompt("Copy this link:", shareUrl); });
+  else prompt("Copy this link:", shareUrl);
+});
+})();
+</script>
+</body>
+</html>
