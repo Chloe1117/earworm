@@ -169,6 +169,7 @@ details[open] summary::after{content:"−"}
 details p{padding:0 0 14px; font-size:14.5px; color:var(--muted)}
 
 footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--faint)}
+footer a,.consent a{color:inherit; text-decoration:underline; text-underline-offset:2px}
 </style>
 </head>
 <body>
@@ -236,7 +237,7 @@ footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font
 
       <label class="consent">
         <input type="checkbox" name="consent" required>
-        <span>Email me when Earworm launches. One email, no spam, unsubscribe anytime.</span>
+        <span>I’m 13 or older (16 in the EU), and I’d like one email when Earworm launches. No spam. <a href="privacy.html">Privacy</a></span>
       </label>
 
       <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -268,7 +269,7 @@ footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font
 </section>
 
 <footer>
-  <p>Earworm is an independent sing-along tool. Not affiliated with any artist, label, agency or YouTube. We store only what you type in this form, and use your email only to tell you about the launch.</p>
+  <p>Earworm is an independent sing-along tool. Not affiliated with any artist, label, agency or YouTube. We store only what you type in this form, and use your email only to tell you about the launch. <a href="privacy.html">Privacy policy</a></p>
 </footer>
 </main>
 
@@ -280,7 +281,7 @@ footer{margin-top:36px; padding-top:16px; border-top:1px solid var(--line); font
    anon 키는 공개돼도 된다: waitlist.sql 의 RLS 가 INSERT 만 허용한다.
    비어 있으면 데모 모드 — 전송 대신 콘솔에 출력하고 완료 화면을 보여준다. */
 var SUPABASE_URL = "";
-var SUPABASE_ANON_KEY = "";
+var SUPABASE_ANON_KEY = "sb_publishable_dJS9nzBUyQ9oxbdmPn9qeQ_aeAhc3Zr";
 
 /* ---------- 유입 경로 ---------- */
 var qs = new URLSearchParams(location.search);
@@ -344,7 +345,7 @@ form.addEventListener("submit", function(e){
   if(!f.country.value) return fail("Please choose your country.", f.country);
   var picked = form.querySelector("input[name=price]:checked");
   if(!picked) return fail("Please pick a price, even “Free only”. It really helps us decide.", pEl.querySelector("input"));
-  if(!f.consent.checked) return fail("Please tick the box so we can email you at launch.", f.consent);
+  if(!f.consent.checked) return fail("Please confirm you’re 13 or older and tick the box so we can email you at launch.", f.consent);
 
   var row = {
     email: email,
