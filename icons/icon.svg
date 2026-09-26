@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#C42B5C"/>
+  <!-- A-B 루프: 두 개의 마커 사이를 도는 화살표 -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M176 196h160a60 60 0 0 1 0 120H176a60 60 0 0 1 0-120"/>
+    <path d="M300 160l36 36-36 36"/>
+  </g>
+  <g fill="#FFFFFF" font-family="Georgia,serif" font-weight="700" font-size="54" text-anchor="middle">
+    <text x="176" y="275">A</text>
+    <text x="336" y="275">B</text>
+  </g>
+</svg>

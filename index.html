@@ -7,6 +7,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Girl on Fire">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 
 <style>
 :root{
@@ -919,4 +922,10 @@ tabs.forEach(function(t){
 paint();
 refresh();
 })();
+</script>
+<script>
+/* 설치형(PWA/TWA) 전제 — 오프라인에서도 셸이 뜨게 한다. 파일로 열었을 땐 조용히 건너뛴다 */
+if("serviceWorker" in navigator && location.protocol==="https:"){
+  navigator.serviceWorker.register("sw.js").catch(function(){});
+}
 </script>
