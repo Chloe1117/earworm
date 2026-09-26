@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Earworm — Sing K-pop in Korean</title>
+<title>Hookline — Sing K-pop in Korean</title>
 <meta name="description" content="Paste the lyrics, loop one line, and sing the chorus in real Korean in 7 days. Join the early-access waitlist.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#F5F2F2" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#161116" media="(prefers-color-scheme: dark)">
-<meta property="og:title" content="Earworm — Sing K-pop in Korean in 7 days">
+<meta property="og:title" content="Hookline — Sing K-pop in Korean in 7 days">
 <meta property="og:description" content="A sing-along trainer for K-pop fans. Loop one line, see how it really sounds, sing the chorus by Day 7.">
 <meta property="og:image" content="../icons/icon-512.png">
 <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
@@ -178,7 +178,7 @@ footer a,.consent a{color:inherit; text-decoration:underline; text-underline-off
 <header class="hero">
   <p class="eyebrow">K-pop sing-along trainer · early access</p>
   <h1>Sing the chorus. <em>In real Korean.</em> In 7&nbsp;days.</h1>
-  <p class="sub">Paste the lyrics of any song you love. Earworm shows how each line <b>actually sounds</b>, loops it until it sticks, and has you singing along by Day 7.</p>
+  <p class="sub">Paste the lyrics of any song you love. Hookline shows how each line <b>actually sounds</b>, loops it until it sticks, and has you singing along by Day 7.</p>
   <a class="cta" href="#join">Join the waitlist</a>
   <p class="meta">Free to join · launching on Android first</p>
 </header>
@@ -237,7 +237,7 @@ footer a,.consent a{color:inherit; text-decoration:underline; text-underline-off
 
       <label class="consent">
         <input type="checkbox" name="consent" required>
-        <span>I’m 13 or older (16 in the EU), and I’d like one email when Earworm launches. No spam. <a href="privacy.html">Privacy</a></span>
+        <span>I’m 13 or older (16 in the EU), and I’d like one email when Hookline launches. No spam. <a href="privacy.html">Privacy</a></span>
       </label>
 
       <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -261,15 +261,15 @@ footer a,.consent a{color:inherit; text-decoration:underline; text-underline-off
 <section aria-labelledby="h-faq">
   <h2 id="h-faq">Questions</h2>
   <div class="card">
-    <details><summary>Which songs can I learn?</summary><p>Any song on YouTube. You paste the lyrics yourself; Earworm doesn’t come with lyrics built in.</p></details>
+    <details><summary>Which songs can I learn?</summary><p>Any song on YouTube. You paste the lyrics yourself; Hookline doesn’t come with lyrics built in.</p></details>
     <details><summary>Do I need to read Hangul?</summary><p>No. Every line is spelled out the way it’s really sung, with the tricky sound changes marked.</p></details>
     <details><summary>How much will it cost?</summary><p>We haven’t decided yet. Your answer above decides it, so pick what feels fair.</p></details>
-    <details><summary>Is this an official app?</summary><p>No. Earworm is an independent learning tool and is not affiliated with any artist, label or agency.</p></details>
+    <details><summary>Is this an official app?</summary><p>No. Hookline is an independent learning tool and is not affiliated with any artist, label or agency.</p></details>
   </div>
 </section>
 
 <footer>
-  <p>Earworm is an independent sing-along tool. Not affiliated with any artist, label, agency or YouTube. We store only what you type in this form, and use your email only to tell you about the launch. <a href="privacy.html">Privacy policy</a></p>
+  <p>Hookline is an independent sing-along tool. Not affiliated with any artist, label, agency or YouTube. We store only what you type in this form, and use your email only to tell you about the launch. <a href="privacy.html">Privacy policy</a></p>
 </footer>
 </main>
 
@@ -391,7 +391,7 @@ var shareText = "Sing K-pop in real Korean in 7 days. Early access:";
 var shareBtn = document.getElementById("shareBtn"), copyBtn = document.getElementById("copyBtn");
 if(!navigator.share) shareBtn.style.display = "none";
 shareBtn.addEventListener("click", function(){
-  navigator.share({ title:"Earworm", text:shareText, url:shareUrl }).catch(function(){});
+  navigator.share({ title:"Hookline", text:shareText, url:shareUrl }).catch(function(){});
 });
 copyBtn.addEventListener("click", function(){
   var ok = function(){ copyBtn.textContent = "Copied"; setTimeout(function(){ copyBtn.textContent = "Copy link"; }, 1600); };

@@ -1,8 +1,8 @@
 {
-  "packageId": "app.earworm.song_english",
+  "packageId": "app.hookline.singalong",
   "host": "REPLACE_WITH_YOUR_DOMAIN",
-  "name": "Earworm — 노래로 굳히는 영어",
-  "launcherName": "Earworm",
+  "name": "Hookline",
+  "launcherName": "Hookline",
   "display": "standalone",
   "orientation": "portrait",
   "themeColor": "#C42B5C",
@@ -19,6 +19,6 @@
   "fallbackType": "customtabs",
   "enableSiteSettingsShortcut": false,
   "isChromeOSOnly": false,
-  "signingKey": { "path": "./android.keystore", "alias": "earworm" },
+  "signingKey": { "path": "./android.keystore", "alias": "hookline" },
   "generatorApp": "bubblewrap-cli"
 }

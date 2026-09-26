@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "Earworm — 노래로 굳히는 영어",
-  "short_name": "Earworm",
+  "name": "Hookline",
+  "short_name": "Hookline",
   "description": "유튜브 A-B 구간반복 + 가사 카드 + 7일 루틴. 한 곡을 귀에 박아 영어로 남긴다.",
   "lang": "ko",
   "start_url": "./?src=pwa",

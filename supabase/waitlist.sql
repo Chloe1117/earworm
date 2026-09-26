@@ -1,4 +1,4 @@
--- Earworm 대기자 테이블 — Supabase SQL Editor 에 그대로 붙여넣어 실행한다.
+-- Hookline 대기자 테이블 — Supabase SQL Editor 에 그대로 붙여넣어 실행한다.
 -- 랜딩 페이지는 공개 anon 키로 INSERT 만 한다. 읽기·수정·삭제는 막는다.
 
 create table if not exists public.waitlist (

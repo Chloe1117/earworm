@@ -1,7 +1,32 @@
-# Earworm — K-pop 따라 부르기 트레이너 · Google Play 전략 메모
+# Hookline — K-pop 따라 부르기 트레이너 · Google Play 전략 메모
 
 > 전제: 이 저장소의 `index.html`(유튜브 A-B 루퍼 + 7일 루틴)을 **해외 K-pop 팬이 한국어 가사를 따라 부르게 만드는 앱**으로 바꿔 Google Play 에 낸다.
 > 이전 버전(한국인 대상 팝송 영어 · 한국 유료 차트)은 폐기한다. 이유는 아래 1장에 있다.
+
+---
+
+## 0. 이름 — Earworm → **Hookline**
+
+| 후보 | 결과 | 이유 |
+| :-- | :-- | :-- |
+| ~~Earworm~~ | 폐기 | Earworms Ltd(영국)의 "Earworms: Learn Languages" — **음악으로 외국어를 가르치는** 같은 콘셉트의 앱이 이미 있음. 검색에서 묻히고 상표 분쟁 시 불리 |
+| ~~Ttara (따라)~~ | 폐기 | "DDARA: Learn Korean"(같은 발음), "TTARA" 앱 존재 |
+| **Hookline** | **채택** | Hook = 곡에서 가장 중독성 있는 후렴 구간. "후렴 한 줄을 입에 붙인다"는 핵심을 담음. 웹 검색상 같은 이름의 앱 없음 |
+
+- 부제: **Hookline — Sing K-pop in real Korean**
+- 안드로이드 패키지 ID: `app.hookline.singalong` (첫 업로드 뒤에는 변경 불가)
+- ⚠️ 웹 검색에서 안 나왔다는 것만으로는 상표가 없다고 할 수 없다. **출시 전 USPTO(앱·교육 분야)와 대상 국가 상표를 확인**한다.
+
+### 경쟁 앱 (2026-09 조사)
+
+| 앱 | 핵심 | 우리와의 차이 |
+| :-- | :-- | :-- |
+| Earworms: Learn Languages | 음악 반복으로 14개 언어 암기 (한국어 없음) | 제작된 교재 음원. 실제 K-pop 곡 아님 |
+| BB: KPOP & Korean Learning | 가사 퀴즈, **사용자가 올린 영상을 레슨으로 변환** | 이해·퀴즈 중심. 우리는 **따라 부르기**(A-B 반복 · 실제 발음 표기 · 녹음 비교) |
+| K-lingo | 한글 기초, 가사·아이돌 표현, 발음 인식 | 레슨 과정형. 우리는 곡 한 개 7일 루틴 |
+| HeyKorea · Kooltong · DDARA | 일반 한국어 학습 + K-pop 소재 | 문법·어휘 강의형 |
+
+→ "K-pop 으로 한국어 배우기"는 이미 붐빈다. **"한 줄을 실제로 부를 수 있게 만든다"** 만 내세운다.
 > 숫자 중 추정치는 모두 **[추정]** 으로 표시했다. 출시 전에 실측으로 바꿔야 한다.
 
 ---
@@ -80,8 +105,8 @@ K-pop 가사는 영어 혼용·속어·반말·생략이 많아 **문법 교재�
 
 | 파일 | 현재 | 변경 |
 | :-- | :-- | :-- |
-| `manifest.webmanifest` | `name` 이 "노래로 굳히는 영어", `lang: ko` | 영어 이름·설명, `lang: en` |
-| `android/twa-manifest.json` | 같은 한국어 이름 | 영어 이름. `packageId` 는 출시 후 변경 불가이므로 **첫 업로드 전 확정** |
+| `manifest.webmanifest` | 이름은 Hookline 으로 변경 완료. 설명은 한국어 영어학습 문구, `lang: ko` | 영어 설명, `lang: en` |
+| `android/twa-manifest.json` | 이름 Hookline, `packageId` `app.hookline.singalong` 로 변경 완료 | 첫 업로드 전 최종 확인 (출시 후 변경 불가) |
 | `index.html` | Girl on Fire 전용 데이터·한국어 UI | 곡 슬롯 일반화 + 영어 UI |
 
 ---

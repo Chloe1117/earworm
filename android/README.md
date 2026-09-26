@@ -7,7 +7,7 @@
 TWA 는 `https://<도메인>/.well-known/assetlinks.json` 으로 앱 소유를 증명한다.
 **도메인 루트**여야 하므로 `chloe1117.github.io/earworm/` 같은 프로젝트 페이지로는 안 된다.
 
-- 권장: 커스텀 도메인(예: `earworm.app`)을 GitHub Pages 에 연결하고, 저장소 루트에 `.well-known/assetlinks.json` 을 둔다.
+- 권장: 커스텀 도메인(예: `hookline.app`)을 GitHub Pages 에 연결하고, 저장소 루트에 `.well-known/assetlinks.json` 을 둔다.
 - 대안: `chloe1117.github.io` 사용자 페이지 저장소 루트에 assetlinks 를 둔다.
 
 검증이 실패하면 앱 상단에 주소창이 뜬다(동작은 한다). 심사 반려 사유는 아니지만 유료 앱으로는 품질 문제다.
