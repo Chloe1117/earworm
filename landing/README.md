@@ -6,7 +6,7 @@
 
 1. [supabase.com](https://supabase.com) 에서 프로젝트 생성
 2. **SQL Editor** 에 [`supabase/waitlist.sql`](../supabase/waitlist.sql) 을 붙여넣고 실행
-3. **Project Settings → API** 에서 `Project URL` 과 `anon public` 키를 복사
+3. **Project Settings → API Keys** 에서 publishable 키(`sb_publishable_…`) 또는 레거시 `anon` 키(`eyJ…`)를, **Data API** 에서 `Project URL` 을 복사 (둘 다 동작)
 4. `landing/index.html` 의 두 줄을 채운다
 
 ```js

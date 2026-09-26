@@ -363,14 +363,16 @@ form.addEventListener("submit", function(e){
   }
 
   go.disabled = true; go.textContent = "Joining…";
+  var headers = {
+    "apikey": SUPABASE_ANON_KEY,
+    "Content-Type": "application/json",
+    "Prefer": "return=minimal"
+  };
+  /* 레거시 anon 키(JWT, eyJ…)만 Bearer 로 보낸다. publishable 키(sb_publishable_…)는 JWT 가 아니라 apikey 헤더만 쓴다 */
+  if(/^eyJ/.test(SUPABASE_ANON_KEY)) headers.Authorization = "Bearer " + SUPABASE_ANON_KEY;
   fetch(SUPABASE_URL.replace(/\/$/,"") + "/rest/v1/waitlist", {
     method: "POST",
-    headers: {
-      "apikey": SUPABASE_ANON_KEY,
-      "Authorization": "Bearer " + SUPABASE_ANON_KEY,
-      "Content-Type": "application/json",
-      "Prefer": "return=minimal"
-    },
+    headers: headers,
     body: JSON.stringify(row)
   }).then(function(res){
     /* 409 = 이미 가입한 이메일 → 사용자에겐 성공과 같다 */
